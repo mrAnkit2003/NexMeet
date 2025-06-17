@@ -21,24 +21,39 @@ app.use(express.urlencoded({ limit: "40kb", extended: true }));
 
 app.use("/api/v1/users", userRoutes);
 
-const start = async () => {
-    app.set("mongo_user")
-    const connectionDb = await mongoose.connect("mongodb+srv://ankitdasad03:C54fGCdL7m3rzpnm@cluster0.hluw2s9.mongodb.net/")
+// const start = async () => {
+//     app.set("mongo_user")
+//     const connectionDb = await mongoose.connect("mongodb+srv://ankitdasad03:C54fGCdL7m3rzpnm@cluster0.hluw2s9.mongodb.net/")
 
-    console.log(`MONGO Connected DB HOst: ${connectionDb.connection.host}`)
-    server.listen(app.get("port"), () => {
-        console.log("LISTENIN ON PORT 8000")
-    });
-
-
-
-}
+//     console.log(`MONGO Connected DB HOst: ${connectionDb.connection.host}`)
+//     server.listen(app.get("port"), () => {
+//         console.log("LISTENIN ON PORT 8000")
+//     });
 
 
 
-start();
+// }
+
+
+
+// start();
 
 //const link = "mongodb+srv://ankitdasad03:<db_password>@cluster0.hluw2s9.mongodb.net/"
 // cont mainlink = "mongodb+srv://ankitdasad03:C54fGCdL7m3rzpnm@cluster0.hluw2s9.mongodb.net/"
 
+const start = async () => {
+  try {
+    const connectionDb = await mongoose.connect(process.env.MONGO_URI);
+    console.log(`✅ MongoDB Connected: ${connectionDb.connection.host}`);
+
+    server.listen(app.get("port"), () => {
+      console.log(`🚀 Server is running on port ${app.get("port")}`);
+    });
+  } catch (error) {
+    console.error("❌ Failed to start server:", error);
+    process.exit(1); // Exit with error code for Render logs
+  }
+};
+
+start();
 
